@@ -1,0 +1,44 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+.zed
+.agents
+AGENTS.md
+PRD.md
+ROADMAP.md
+TODO.md
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Postgres data
+.pgdata
+
+
+
+# Backend storage (user uploads, persistent data)
+backend/storage/
+
+# Backend build
+backend/dist/
+
+# Frontend build
+frontend/dist/

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Dokumentasi"
+    url: https://github.com/sekeco/cekstatus#readme
+    about: Cek dokumentasi proyek sebelum membuat issue

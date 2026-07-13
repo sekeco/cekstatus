@@ -1,0 +1,99 @@
+services:
+  db:
+    image: postgres:17.10-alpine3.24
+    container_name: cekstatus-db
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - .pgdata:/var/lib/postgresql/17/docker
+    networks:
+      - cekstatus-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer
+    container_name: cekstatus-adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+    ports:
+      - 8080:8080
+    networks:
+      - cekstatus-net
+    profiles:
+      - admin
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: cekstatus-backend
+    restart: always
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 8000
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-postgres}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET is required}
+      BACKEND_URL: ${BACKEND_URL:-http://localhost}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+    volumes:
+      - ./backend/storage/uploads:/app/storage/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - cekstatus-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL:-http://localhost}
+    container_name: cekstatus-frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      NEXT_PUBLIC_FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      NEXT_PUBLIC_BACKEND_URL: ${BACKEND_URL:-http://localhost}
+    depends_on:
+      - backend
+    networks:
+      - cekstatus-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: cekstatus-nginx
+    restart: always
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - cekstatus-net
+
+networks:
+  cekstatus-net:
+    name: cekstatus-net
+    driver: bridge

@@ -1,0 +1,25 @@
+{
+  "name": "cekstatus",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "bun --env-file=.env run --filter @cekstatus/backend dev & bun --env-file=.env run --filter @cekstatus/frontend dev & wait",
+    "dev:backend": "bun --env-file=.env run --filter @cekstatus/backend dev",
+    "dev:frontend": "bun --env-file=.env run --filter @cekstatus/frontend dev",
+    "build": "bun --env-file=.env run --filter @cekstatus/backend build && bun --env-file=.env run --filter @cekstatus/frontend build",
+    "db:generate": "bun --env-file=.env run --filter @cekstatus/backend db:generate",
+    "db:migrate": "bun --env-file=.env run --filter @cekstatus/backend db:migrate",
+    "db:push": "bun --env-file=.env run --filter @cekstatus/backend db:push",
+    "db:studio": "bun --env-file=.env run --filter @cekstatus/backend db:studio",
+    "auth:generate": "bun --env-file=.env run --filter @cekstatus/backend auth:generate",
+    "auth:migrate": "bun --env-file=.env run --filter @cekstatus/backend auth:migrate"
+  },
+  "overrides": {
+    "@sinclair/typebox": "0.34.28"
+  }
+}

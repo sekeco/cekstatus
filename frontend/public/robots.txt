@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cekstatus.id/sitemap.xml
+
+# Disallow admin pages from crawling
+Disallow: /dashboard/
+Disallow: /org/
+Disallow: /api/
