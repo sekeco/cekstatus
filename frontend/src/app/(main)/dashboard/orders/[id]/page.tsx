@@ -64,7 +64,7 @@ import { type AttachmentResponse, api, type OrderDetailResponse, type StatusEven
 import { useActiveOrganization } from "@/lib/auth-client";
 
 // Base URL for public/frontend links (tracking page, etc.)
-const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://cekstatus.id";
 // Backend URL for media (uploaded images served by backend)
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
