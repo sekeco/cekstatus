@@ -63,8 +63,8 @@ interface TrackingResult {
   message?: string;
 }
 
-function formatDate(iso: string) {
-  return format(new Date(iso), "dd MMM yyyy, HH:mm", { locale: idLocale });
+function formatDate(iso: string | undefined) {
+  return iso ? format(new Date(iso), "dd MMM yyyy, HH:mm", { locale: idLocale }) : "-";
 }
 
 export default function TrackResultPage({ params }: { params: Promise<{ code: string }> }) {
@@ -319,11 +319,11 @@ export default function TrackResultPage({ params }: { params: Promise<{ code: st
   );
 }
 
-function DetailRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+function DetailRow({ label, value, mono }: { label: string; value?: string; mono?: boolean }) {
   return (
     <div className="flex justify-between gap-4 border-border/50 border-b pb-2 last:border-0">
       <span className="shrink-0 text-muted-foreground">{label}</span>
-      <span className={`text-right font-medium ${mono ? "font-mono text-xs" : ""}`}>{value}</span>
+      <span className={`text-right font-medium ${mono ? "font-mono text-xs" : ""}`}>{value ?? "-"}</span>
     </div>
   );
 }

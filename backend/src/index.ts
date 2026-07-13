@@ -30,7 +30,7 @@ const app = new Elysia()
 ## Base URL
 
 \`\`\`
-http://localhost:8000
+https://cekstatus.id
 \`\`\`
 
 ## Autentikasi

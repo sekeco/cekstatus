@@ -13,7 +13,7 @@ RUN bun install --frozen-lockfile --ignore-scripts
 # Copy backend source (including pre-generated Drizzle migrations)
 COPY backend ./backend
 
-# Build backend (bundles into a single executable file)
+# Build backend (bundles into dist/)
 RUN bun run --filter @cekstatus/backend build
 
 # Prune devDependencies — only production deps remain
@@ -43,4 +43,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 
 ENV NODE_ENV=production
 
-CMD ["bun", "run", "dist/index.js"]
+CMD bun run dist/db/migrate.js && bun run dist/index.js
